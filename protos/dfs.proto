@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+service DFSService {
+  rpc RequestUpload (UploadRequest) returns (UploadResponse);
+  rpc UploadChunk (ChunkData) returns (Reply);
+  // [BARU] Data Node lapor status ke Master
+  rpc Heartbeat (NodeStatus) returns (Reply);
+}
+
+message UploadRequest {
+  string filename = 1;
+  int64 filesize = 2;
+}
+
+message UploadResponse {
+  string filename = 1;
+  repeated string target_datanodes = 2; 
+}
+
+message ChunkData {
+  string filename = 1;
+  bytes data = 2;
+}
+
+message Reply {
+  bool success = 1;
+  string message = 2;
+}
+
+// [BARU] Identitas Node
+message NodeStatus {
+    string node_id = 1; // misal: "datanode-1"
+    string port = 2;
+}

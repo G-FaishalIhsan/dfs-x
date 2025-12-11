@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # --- MASTER NODE ---
+  master-node:
+    build: .
+    command: python master.py
+    ports:
+      - "50051:50051" # Expose port Master ke laptop kita
+    networks:
+      - dfs-net
+
+  # --- DATA NODE 1 ---
+  datanode-1:
+    build: .
+    command: python datanode.py
+    volumes:
+      - ./storage/node1:/data # Hubungkan folder laptop ke container
+    networks:
+      - dfs-net
+
+  # --- DATA NODE 2 ---
+  datanode-2:
+    build: .
+    command: python datanode.py
+    volumes:
+      - ./storage/node2:/data
+    networks:
+      - dfs-net
+
+  # --- DATA NODE 3 ---
+  datanode-3:
+    build: .
+    command: python datanode.py
+    volumes:
+      - ./storage/node3:/data
+    networks:
+      - dfs-net
+
+networks:
+  dfs-net:
