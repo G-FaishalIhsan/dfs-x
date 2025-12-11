@@ -8,7 +8,6 @@
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker)
 
 **Topik:** Cloud-based Distributed File Storage  
-**Status:** ✅ 100% Memenuhi Spesifikasi (Replikasi, Partisi, Fault Recovery, Konsistensi)
 
 [Instalasi](#-cara-instalasi--menjalankan) • [Pengujian](#-cara-melakukan-pengujian-skenario-utama) • [Fault Recovery](#-uji-coba-fault-recovery-nilai-plus)
 
