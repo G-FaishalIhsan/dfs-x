@@ -49,6 +49,11 @@ class DFSServiceStub(object):
                 request_serializer=protos_dot_dfs__pb2.NodeStatus.SerializeToString,
                 response_deserializer=protos_dot_dfs__pb2.Reply.FromString,
                 _registered_method=True)
+        self.DeleteChunk = channel.unary_unary(
+                '/DFSService/DeleteChunk',
+                request_serializer=protos_dot_dfs__pb2.ChunkData.SerializeToString,
+                response_deserializer=protos_dot_dfs__pb2.Reply.FromString,
+                _registered_method=True)
 
 
 class DFSServiceServicer(object):
@@ -67,7 +72,13 @@ class DFSServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def Heartbeat(self, request, context):
-        """[BARU] Data Node lapor status ke Master
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteChunk(self, request, context):
+        """[BARU] Fitur Rollback: Menghapus data jika replikasi gagal
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -89,6 +100,11 @@ def add_DFSServiceServicer_to_server(servicer, server):
             'Heartbeat': grpc.unary_unary_rpc_method_handler(
                     servicer.Heartbeat,
                     request_deserializer=protos_dot_dfs__pb2.NodeStatus.FromString,
+                    response_serializer=protos_dot_dfs__pb2.Reply.SerializeToString,
+            ),
+            'DeleteChunk': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteChunk,
+                    request_deserializer=protos_dot_dfs__pb2.ChunkData.FromString,
                     response_serializer=protos_dot_dfs__pb2.Reply.SerializeToString,
             ),
     }
@@ -172,6 +188,33 @@ class DFSService(object):
             target,
             '/DFSService/Heartbeat',
             protos_dot_dfs__pb2.NodeStatus.SerializeToString,
+            protos_dot_dfs__pb2.Reply.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeleteChunk(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/DFSService/DeleteChunk',
+            protos_dot_dfs__pb2.ChunkData.SerializeToString,
             protos_dot_dfs__pb2.Reply.FromString,
             options,
             channel_credentials,

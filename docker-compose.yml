@@ -6,7 +6,9 @@ services:
     build: .
     command: python master.py
     ports:
-      - "50051:50051" # Expose port Master ke laptop kita
+      - "50051:50051"
+    volumes:
+      - ./hasil_output:/app/hasil_output 
     networks:
       - dfs-net
 
@@ -15,7 +17,7 @@ services:
     build: .
     command: python datanode.py
     volumes:
-      - ./storage/node1:/data # Hubungkan folder laptop ke container
+      - ./storage/node1:/data
     networks:
       - dfs-net
 
@@ -36,6 +38,15 @@ services:
       - ./storage/node3:/data
     networks:
       - dfs-net
+
+  # # --- DATA NODE 4 ---
+  # datanode-4:
+  #   build: .
+  #   command: python datanode.py
+  #   volumes:
+  #     - ./storage/node4:/data
+  #   networks:
+  #     - dfs-net
 
 networks:
   dfs-net:

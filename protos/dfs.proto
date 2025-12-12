@@ -3,8 +3,10 @@ syntax = "proto3";
 service DFSService {
   rpc RequestUpload (UploadRequest) returns (UploadResponse);
   rpc UploadChunk (ChunkData) returns (Reply);
-  // [BARU] Data Node lapor status ke Master
   rpc Heartbeat (NodeStatus) returns (Reply);
+  
+  // [BARU] Fitur Rollback: Menghapus data jika replikasi gagal
+  rpc DeleteChunk (ChunkData) returns (Reply);
 }
 
 message UploadRequest {
@@ -27,8 +29,7 @@ message Reply {
   string message = 2;
 }
 
-// [BARU] Identitas Node
 message NodeStatus {
-    string node_id = 1; // misal: "datanode-1"
+    string node_id = 1;
     string port = 2;
 }

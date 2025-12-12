@@ -9,50 +9,54 @@ HEARTBEAT_TIMEOUT = 10
 
 class MasterService(pb2_grpc.DFSServiceServicer):
     def __init__(self):
-        # Dictionary untuk menyimpan kapan terakhir node lapor
-        # Format: {"datanode-1": timestamp, "datanode-2": timestamp}
         self.alive_nodes = {} 
         self.rr_index = 0
 
     def Heartbeat(self, request, context):
-        """Menerima sinyal kehidupan dari Data Node"""
         node_id = request.node_id
-        # Simpan waktu sekarang
         self.alive_nodes[node_id] = time.time()
-        # print(f"[Heartbeat] {node_id} is alive.") # Uncomment untuk debug
         return pb2.Reply(success=True, message="Ack")
 
     def RequestUpload(self, request, context):
-        # 1. Filter Node yang Hidup (Fault Detection)
+        # 1. Filter Node yang Hidup
         current_time = time.time()
         active_nodes = []
         
-        # Cek setiap node, apakah heartbeat terakhir < 10 detik yang lalu?
         for node_id, last_seen in list(self.alive_nodes.items()):
             if current_time - last_seen < HEARTBEAT_TIMEOUT:
                 active_nodes.append(node_id)
             else:
                 print(f"[Master] ALERT: {node_id} dianggap MATI/DOWN!")
         
-        # Sort agar urutan konsisten
         active_nodes.sort() 
 
-        if len(active_nodes) < 2:
-            print("[Master] GAGAL: Tidak cukup node aktif untuk replikasi!")
+        # --- LOGIKA BARU (ADAPTIF) ---
+        num_active = len(active_nodes)
+
+        if num_active == 0:
+            print("[Master] GAGAL: Tidak ada node aktif sama sekali!")
             return pb2.UploadResponse(filename=request.filename, target_datanodes=[])
 
-        # 2. Logika Distribusi (Round Robin pada Node Aktif)
-        primary = active_nodes[self.rr_index % len(active_nodes)]
-        replica = active_nodes[(self.rr_index + 1) % len(active_nodes)]
+        targets = []
         
-        # Update index
-        self.rr_index = (self.rr_index + 1) % len(active_nodes)
+        if num_active >= 2:
+            # Skenario Normal (Replikasi)
+            primary = active_nodes[self.rr_index % num_active]
+            replica = active_nodes[(self.rr_index + 1) % num_active]
+            targets = [primary, replica]
+            print(f"[Master] Replikasi -> Primary: {primary}, Replica: {replica}")
+        else:
+            # Skenario Sekuensial (Single Node) - HANYA 1 Node Hidup
+            primary = active_nodes[0]
+            targets = [primary]
+            print(f"[Master] Single Node (No Replikasi) -> Target: {primary}")
 
-        print(f"[Master] Assign -> Primary: {primary}, Replica: {replica} (Aktif: {len(active_nodes)})")
+        # Update index Round Robin
+        self.rr_index = (self.rr_index + 1) % num_active
 
         return pb2.UploadResponse(
             filename=request.filename,
-            target_datanodes=[primary, replica]
+            target_datanodes=targets
         )
 
 def serve():
