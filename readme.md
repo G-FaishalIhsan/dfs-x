@@ -270,7 +270,7 @@ Sesuai spesifikasi, kita akan menguji upload **100 file (Total 50 MB)**.
 ### 📊 Output yang Diharapkan:
 
 <div align="center">
-  <img src="hasil_output/dashboard_performansi.png" width="850" alt="Dashboard Performansi">
+  <img src="Hasil Pengujian/3 nodes scalability.png" width="850" alt="Dashboard Performansi">
 </div>
 
 ---
