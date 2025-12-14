@@ -48,5 +48,41 @@ services:
   #   networks:
   #     - dfs-net
 
+  # # --- DATA NODE 5 ---
+  # datanode-5:
+  #   build: .
+  #   command: python datanode.py
+  #   volumes:
+  #     - ./storage/node5:/data
+  #   networks:
+  #     - dfs-net
+
+  # # --- DATA NODE 6 ---
+  # datanode-6:
+  #   build: .
+  #   command: python datanode.py
+  #   volumes:
+  #     - ./storage/node6:/data
+  #   networks:
+  #     - dfs-net
+
+  # # --- DATA NODE 7 ---
+  # datanode-7:
+  #   build: .
+  #   command: python datanode.py
+  #   volumes:
+  #     - ./storage/node7:/data
+  #   networks:
+  #     - dfs-net
+
+  # # --- DATA NODE 8 ---
+  # datanode-8:
+  #   build: .
+  #   command: python datanode.py
+  #   volumes:
+  #     - ./storage/node8:/data
+  #   networks:
+  #     - dfs-net
+
 networks:
   dfs-net:

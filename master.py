@@ -30,7 +30,6 @@ class MasterService(pb2_grpc.DFSServiceServicer):
         
         active_nodes.sort() 
 
-        # --- LOGIKA BARU (ADAPTIF) ---
         num_active = len(active_nodes)
 
         if num_active == 0:

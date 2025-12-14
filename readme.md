@@ -37,7 +37,10 @@ Proyek ini adalah implementasi sistem file terdistribusi sederhana (mirip konsep
 ```text
 dfs-x/
 │
-├── protos/
+├── hasil_output/        # Hasil benchmark & dashboard (auto-generated)
+|   └── dashboard_performansi.png        
+|
+|├── protos/
 │   ├── dfs.proto        # Definisi kontrak komunikasi gRPC
 │   ├── dfs_pb2.py       # (Auto-generated code)
 │   └── dfs_pb2_grpc.py  # (Auto-generated code)
@@ -235,7 +238,7 @@ docker-compose up --build
 
 ---
 
-## 🧪 Cara Melakukan Pengujian (Skenario Utama)
+## 🧪 Cara Melakukan Pengujian
 
 Sesuai spesifikasi, kita akan menguji upload **100 file (Total 50 MB)**.
 
@@ -270,11 +273,9 @@ Sesuai spesifikasi, kita akan menguji upload **100 file (Total 50 MB)**.
   <img src="hasil_output/dashboard_performansi.png" width="850" alt="Dashboard Performansi">
 </div>
 
-> 📈 _Data ini bisa Anda gunakan untuk membuat grafik di laporan._
-
 ---
 
-## 🔥 Uji Coba Fault Recovery (Nilai Plus)
+## 🔥 Uji Coba Fault Recovery
 
 Untuk membuktikan sistem tahan banting (Failover), lakukan langkah ini saat pengujian sedang berjalan:
 
@@ -285,7 +286,7 @@ Untuk membuktikan sistem tahan banting (Failover), lakukan langkah ini saat peng
 2. **Saat proses berjalan** (misal di file ke-20), buka terminal host lain dan matikan salah satu node:
 
    ```bash
-   docker stop dfs-x-datanode-2
+   docker stop dfs-x-datanode-2-1
    ```
 
 3. **🎯 Hasil yang Diharapkan:**
@@ -330,6 +331,7 @@ Jika ingin mengulang pengujian dari awal yang bersih:
 | **Protocol Buffers** | Serialisasi data           |
 | **Docker**           | Containerization           |
 | **Docker Compose**   | Orkestrasi multi-container |
+| **Matplotlib**       | Hasil Grafik Output        |
 
 </div>
 

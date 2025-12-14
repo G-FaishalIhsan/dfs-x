@@ -20,7 +20,7 @@ class DataNodeService(pb2_grpc.DFSServiceServicer):
         except Exception as e:
             return pb2.Reply(success=False, message=str(e))
 
-    # [BARU] Fungsi Rollback untuk menjaga Konsistensi
+    # Fungsi Rollback untuk menjaga Konsistensi
     def DeleteChunk(self, request, context):
         print(f"[{NODE_ID}] ROLLBACK: Menghapus {request.filename}...")
         filepath = os.path.join(STORAGE_PATH, request.filename)
